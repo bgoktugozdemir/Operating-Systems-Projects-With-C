@@ -1,5 +1,15 @@
 // ! FOR COMPILEING THE CODE: gcc zamanOlc.c -o zamanOlc
 // ! TO RUN EXECUTEABLE PROGRAM: ./zamanOlc <terminal command> <parameter (optional)>
+/* * * * * * * * * * * * * * *
+########  ######## 
+#       # #
+########  ########
+#       # #      #
+########  ########
+
+Coded by Berat Göktuğ Özdemir
+02 November 2019
+* * * * * * * * * * * * * * */
 
 #include <unistd.h>
 #include <sys/types.h>
@@ -14,8 +24,8 @@
 #include <sys/wait.h>
 #include <time.h>
 
-// Helper Methods
-unsigned long getTimeOfDayMS();
+// # Helper Methods # \\
+unsigned long getTimeMS();
 char *concatenate(const char *, const char *);
 
 int main(int argc, char **argv)
@@ -24,7 +34,7 @@ int main(int argc, char **argv)
     const int SIZE = 4096;
 
     // * Name of Shared Memory Object and name of the binary folder
-    const char *name = "OS", *binaryPath = "/bin/";
+    const char *name = "SM", *binaryPath = "/bin/";
 
     // * Shared Memory File Descriptor
     int fd;
@@ -62,7 +72,7 @@ int main(int argc, char **argv)
         ptr = (char *)mmap(0, SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
 
         // ? Write time to the Shared Memory Object
-        sprintf(ptr, "%lu", getTimeOfDayMS());
+        sprintf(ptr, "%lu", getTimeMS());
 
         // ? Concatenate the given arguments in a single string
         char *path = concatenate(binaryPath, argv[1]);
@@ -90,7 +100,7 @@ int main(int argc, char **argv)
 
         // ? Calculate the Elapsed Time
         unsigned long startTime = strtoul((char *)ptr, NULL, 10);
-        unsigned long stopTime = getTimeOfDayMS();
+        unsigned long stopTime = getTimeMS();
 
         printf("Geçen süre %lu ms' dir\n", stopTime - startTime);
 
@@ -102,9 +112,9 @@ int main(int argc, char **argv)
 }
 
 // * Returns the time in type of milliseconds(ms)
-unsigned long getTimeOfDayMS()
+unsigned long getTimeMS()
 {
-    // ? tv_sec = seconds 
+    // ? tv_sec = seconds
     // ? tv_usec = microseconds
 
     struct timeval tv;
